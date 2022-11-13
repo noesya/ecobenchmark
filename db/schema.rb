@@ -10,34 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_09_104854) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_13_173427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "account", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "login"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "creation_date", null: false
   end
 
-  create_table "lists", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "list", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.text "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_lists_on_account_id"
+    t.datetime "creation_date", null: false
+    t.index ["account_id"], name: "index_list_on_account_id"
   end
 
-  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "task", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "list_id", null: false
     t.text "name"
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["list_id"], name: "index_tasks_on_list_id"
+    t.datetime "creation_date", null: false
+    t.index ["list_id"], name: "index_task_on_list_id"
   end
 
-  add_foreign_key "lists", "accounts"
-  add_foreign_key "tasks", "lists"
+  add_foreign_key "list", "account"
+  add_foreign_key "task", "list"
 end
